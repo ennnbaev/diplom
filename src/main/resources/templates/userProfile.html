@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Кабинет пользователя</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #253858;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+            padding: 0 20px;
+        }
+        .logo img {
+            height: 60px;
+            width: auto;
+        }
+        .profile img {
+            height: 40px;
+            width: auto;
+        }
+        .header-buttons {
+            display: flex;
+            align-items: center;
+        }
+        .header-buttons > * {
+            background-color: #253858;
+            color: #fff;
+            padding: 10px;
+            border: 2px solid #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .header-buttons > *:last-child {
+            margin-right: 0;
+        }
+        .header-buttons > *:hover {
+            background-color: #0056b3;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type="text"], input[type="password"], input[type="email"], input[type="tel"], textarea {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        input[type="submit"], input[type="button"], button {
+            background-color:#253858;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        input[type="submit"]:hover, input[type="button"]:hover, button:hover {
+            background-color: #0056b3;
+        }
+        .items-container {
+            margin-top: 20px;
+        }
+        .item {
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .item h3 {
+            margin-top: 0;
+        }
+        .item p {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="logo">
+        <a class="logo" href="items.html">
+            <img src="http://localhost:63342/demo/templates/static/img/Frame 4.svg" alt="logo"></a>
+    </div>
+    <div class="header-buttons">
+        <button type="button" onclick="getAllItems()">Все объявления</button>
+        <button type="button" onclick="addNewItem()">Добавить объявление</button>
+    </div>
+    <div class="profile">
+        <a class="profile" href="http://localhost:8080/user/my-info">
+            <img src="http://localhost:63342/demo/templates/static/img/Vector.svg" alt="profile"></a>
+    </div>
+</header>
+<div class="container">
+    <h2>Мои данные</h2>
+    <form id="userForm">
+        <input type="text" id="username" name="username" placeholder="Username" th:value="${user.getUsername()}">
+        <input type="email" id="email" name="email" placeholder="Email" th:value="${user.getEmail()}">
+        <input type="tel" id="phone" name="phone" placeholder="Phone number" th:value="${user.getPhoneNumber()}">
+        <input type="submit" value="Update">
+        <input type="button" value="Delete Account">
+    </form>
+    <h2>Мои предметы</h2>
+    <div class="items-container">
+        <!-- Итерация по списку айтемов пользователя -->
+        <div th:each="item, itemStat : ${user.items}" class="item">
+            <form th:id="'itemForm_' + ${itemStat.index}">
+                <input type="hidden" th:id="'itemId_' + ${itemStat.index}" name="id" th:value="${item.id}" />
+                <input type="text" th:id="'itemName_' + ${itemStat.index}" th:value="${item.name}" placeholder="Item Name"/>
+                <input type="text" th:id="'itemDescription_' + ${itemStat.index}" name="description" th:value="${item.description}" placeholder="Description"/>
+                <input type="text" th:id="'itemPrice_' + ${itemStat.index}" name="price" th:value="${item.price}" placeholder="Price"/>
+                <input type="text" th:id="'itemCategory_' + ${itemStat.index}" name="category" th:value="${item.category}" placeholder="Category"/>
+                <input type="text" th:id="'wantedItem_' + ${itemStat.index}" th:value="${item.wantedItem}" placeholder="Wanted item"/>
+                <button type="button" th:onclick="'updateItem(' + ${itemStat.index} + ')'">Update</button>
+                <button type="button" th:onclick="'deleteItem(' + ${itemStat.index} + ')'">Delete</button>
+            </form>
+        </div>
+    </div>
+    <script th:inline="javascript">
+        function getAllItems() {
+            window.location.href = "http://localhost:8080/items/info?category=&name=";
+        }
+
+        function addNewItem() {
+            window.location.href = "http://localhost:8080/items/creation";
+        }
+        function updateItem(itemId) {
+            // Получаем данные айтема по его ID
+            var item = {
+                id: document.getElementById('itemId_' + itemId).value,
+                name: document.getElementById('itemName_' + itemId).value,
+                description: document.getElementById('itemDescription_' + itemId).value,
+                price: document.getElementById('itemPrice_' + itemId).value,
+                category: document.getElementById('itemCategory_' + itemId).value,
+                wantedItem: document.getElementById('wantedItem_' + itemId).value
+
+            };
+
+            // Отправляем AJAX-запрос на сервер
+            let xhr = new XMLHttpRequest();
+            xhr.open("PATCH", "http://localhost:8080/items", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        // Обновляем страницу, если запрос выполнен успешно
+                        location.reload();
+                    } else {
+                        // Обработка ошибки
+                        console.error("Error:", xhr.responseText);
+                        alert("Error: " + xhr.responseText);
+                    }
+                }
+            };
+            xhr.send(JSON.stringify(item));
+        }
+
+        function deleteItem(itemId) {
+            // Получаем ID айтема для удаления
+            var item = {
+                id: document.getElementById('itemId_' + itemId).value,
+                name: document.getElementById('itemName_' + itemId).value,
+                description: document.getElementById('itemDescription_' + itemId).value,
+                price: document.getElementById('itemPrice_' + itemId).value,
+                category: document.getElementById('itemCategory_' + itemId).value,
+                wantedItem: document.getElementById('wantedItem_' + itemId).value
+
+            };
+
+            // Отправляем AJAX-запрос на сервер для удаления айтема
+            let xhr = new XMLHttpRequest();
+            xhr.open("DELETE", "http://localhost:8080/items", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        // Обновляем страницу, если запрос выполнен успешно
+                        location.reload();
+                    } else {
+                        // Обработка ошибки
+                        console.error("Error:", xhr.responseText);
+                        alert("Error: " + xhr.responseText);
+                    }
+                }
+            };
+            xhr.send(JSON.stringify(item));
+        }
+    </script>
+</div>
+<script>
+
+    document.getElementById("userForm").addEventListener("submit", function(event) {
+        event.preventDefault(); // Предотвращаем отправку формы по умолчанию
+
+        // Получаем данные из формы
+        let formData = {
+            username: document.getElementById("username").value,
+            email: document.getElementById("email").value,
+            phoneNumber: document.getElementById("phone").value
+        };
+
+        // Отправляем AJAX-запрос на сервер
+        let xhr = new XMLHttpRequest();
+        xhr.open("PATCH", "http://localhost:8080/user", true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    // Обновляем страницу, если запрос выполнен успешно
+                    location.reload();
+                } else {
+                    // Обработка ошибки
+                    console.error("Error:", xhr.responseText);
+                    alert("Error: " + xhr.responseText);
+                }
+            }
+        };
+        xhr.send(JSON.stringify(formData));
+    });
+</script>
+</body>
+</html>
