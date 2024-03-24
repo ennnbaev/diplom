@@ -25,6 +25,14 @@
             border-radius: 5px;
             box-sizing: border-box;
         }
+        select{
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
         input[type="submit"] {
             background-color: #253858;
             color: #fff;
@@ -108,7 +116,12 @@
         <input type="text" id="name" name="name" placeholder="Name">
         <input type="text" id="description" name="description" placeholder="Description">
         <input type="text" id="price" name="price" placeholder="Price">
-        <input type="text" id="category" name="category" placeholder="Category">
+        <select id="category" name="category">
+            <option value="clothing">Одяг та взуття</option>
+            <option value="electronics">Техніка</option>
+            <option value="home">Товари для дому</option>
+            <option value="hobby">Хоббі</option>
+        </select>
         <input type="text" id="wantedItem" name="wantedItem" placeholder="Wanted Item">
         <input type="submit" value="Submit">
     </form>

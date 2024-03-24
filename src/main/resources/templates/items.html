@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Моя страница</title>
     <style>
+        .selected {
+            background-color: lightgray; /* Любой стиль, который вы хотите использовать для выделенной категории */
+        }
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
         }
+
         header {
             background-color: #253858;
             color: white;
@@ -19,18 +24,22 @@
             height: 80px;
             padding: 0 20px;
         }
+
         .logo img {
             height: 60px;
             width: auto;
         }
+
         .profile img {
             height: 40px;
             width: auto;
         }
+
         .header-buttons {
             display: flex;
             align-items: center;
         }
+
         .header-buttons > * {
             background-color: #253858;
             color: #fff;
@@ -40,17 +49,21 @@
             cursor: pointer;
             margin-right: 10px;
         }
+
         .header-buttons > *:last-child {
             margin-right: 0;
         }
+
         .header-buttons > *:hover {
             background-color: #253858;
         }
+
         .search-bar {
             display: flex;
             align-items: center;
             margin: 20px 0;
         }
+
         .search-input {
             font-family: SF Pro Text;
             font-size: 18px;
@@ -70,6 +83,7 @@
             background: linear-gradient(0deg, #FAFBFC, #FAFBFC),
             linear-gradient(0deg, #253858, #253858);
         }
+
         .search-button {
             width: 60px;
             left: 650px;
@@ -81,25 +95,33 @@
             position: absolute;
 
         }
+
         .category-container {
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 10px;
             width: 200px; /* Ширина блока категорий */
         }
+
         .category {
             padding: 10px;
             border-radius: 5px;
             margin-bottom: 10px;
             text-decoration: none; /* Убираем подчеркивание */
             color: black; /* Цвет текста */
+            cursor: pointer; /* Делаем курсор указателем */
         }
+
+        .category.selected {
+            background-color: lightgray; /* Изменяем фон при выделении */
+        }
+
         .category:hover {
             background-color: lightgray; /* Фон при наведении */
             text-decoration: none; /* Убираем подчеркивание */
-
             color: blue; /* Цвет текста при наведении */
         }
+
         .category:hover::after {
             content: "";
             display: block;
@@ -107,9 +129,9 @@
             height: 2px;
             background-color: blue; /* Линия под текстом при наведении */
             text-decoration: none; /* Убираем подчеркивание */
-
             margin-top: 5px;
         }
+
         .item-card {
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -148,15 +170,13 @@
         .item-details strong {
             color: #253858;
         }
-
-
     </style>
 </head>
 <body>
 <header>
     <div class="logo">
         <a class="logo" href="items.html">
-            <img src="http://localhost:63342/demo/templates/static/img/Frame 4.svg"  alt="logo"></a>
+            <img src="http://localhost:63342/demo/templates/static/img/Frame 4.svg" alt="logo"></a>
     </div>
     <div class="header-buttons">
         <button type="button" onclick="addNewItem()">Добавить объявление</button>
@@ -167,15 +187,16 @@
     </div>
 </header>
 <div class="search-bar">
-    <input type="text" class="search-input" placeholder="What do you find...">
-    <button class="search-button" type="submit">
+    <input type="text" id="searchInput" class="search-input" placeholder="What do you find...">
+    <button class="search-button" onclick="searchItems()" type="submit">
         <img src="http://localhost:63342/demo/templates/static/img/search_svgrepo.com.svg" alt="Search Icon">
     </button>
 </div>
 <div class="category-container">
-    <div class="category">Категория 1</div>
-    <div class="category">Категория 2</div>
-    <div class="category">Категория 3</div>
+    <div class="category" data-category="clothing" onclick="selectCategory('clothing')">Одяг та взуття</div>
+    <div class="category" data-category="electronics" onclick="selectCategory('electronics')">Техніка</div>
+    <div class="category" data-category="home" onclick="selectCategory('home')">Товари для дому</div>
+    <div class="category" data-category="hobby" onclick="selectCategory('hobby')">Хоббі</div>
 </div>
 <div th:each="item, itemIndex : ${items}" class="item-card">
     <div class="item-header">
@@ -192,24 +213,33 @@
 
 
 <script>
+    var categoryVal = '';
+
+    function selectCategory(category) {
+        var categories = document.querySelectorAll('.category');
+        categories.forEach(function (element) {
+            if (element.getAttribute('data-category') === category) {
+                if (!element.classList.contains('selected')) {
+                    categoryVal = category;
+                    element.classList.add('selected');
+                } else {
+                    element.classList.remove('selected');
+                }
+            } else {
+                element.classList.remove('selected');
+            }
+        });
+    }
+
     function addNewItem() {
         window.location.href = "http://localhost:8080/items/creation";
     }
-    function updateItem(itemId) {
-        // Получаем данные айтема по его ID
-        var item = {
-           itemId:itemId
-        };
 
-        // Отправляем AJAX-запрос на сервер
-        let xhr = new XMLHttpRequest();
-        xhr.open("POST", "http://localhost:8080/items/offer", true);
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-            }
-        };
-        xhr.send(JSON.stringify(item));
+    function searchItems() {
+        var searchQuery = document.getElementById('searchInput').value;
+
+        console.log(categoryVal + "/ " + searchQuery);
+        window.location.href = "http://localhost:8080/items/info?category=" + categoryVal + "&name=" + searchQuery;
     }
 </script>
 </body>
