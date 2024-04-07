@@ -2,98 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Новый айтем</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 500px;
-            margin: 20px auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        input[type="text"], textarea {
-            width: calc(100% - 20px);
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-        select{
-            width: calc(100% - 20px);
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-        input[type="submit"] {
-            background-color: #253858;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            display: block;
-            width: calc(100% - 20px);
-            margin: 10px auto;
-        }
-        input[type="submit"]:hover {
-            background-color: #007bff;
-
-        }
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            background-color: #253858;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 80px;
-            padding: 0 20px;
-        }
-        .logo img {
-            height: 60px;
-            width: auto;
-        }
-        .profile img {
-            height: 40px;
-            width: auto;
-        }
-        .header-buttons {
-            display: flex;
-            align-items: center;
-        }
-        .header-buttons > * {
-            background-color: #253858;
-            color: #fff;
-            padding: 10px;
-            border: 2px solid #fff;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-        .header-buttons > *:last-child {
-            margin-right: 0;
-        }
-        .header-buttons > *:hover {
-            background-color: #253858;
-        }
-        .profile {
-            width: 30px;
-            height: 30px;
-        }
-    </style>
+    <title>New item</title>
+    <link rel="stylesheet" href="http://localhost:63342/demo/templates/styles/createStyle.css">
 </head>
 <body>
 <header>
@@ -102,8 +12,8 @@
             <img src="http://localhost:63342/demo/templates/static/img/Frame 4.svg"  alt="logo"></a>
     </div>
     <div class="header-buttons">
-        <button type="button" onclick="getAllItems()">Все объявления</button>
-        <button type="button" onclick="addNewItem()">Добавить объявление</button>
+        <button type="button" onclick="getAllItems()">All items</button>
+        <button type="button" onclick="addNewItem()">Add new item</button>
     </div>
     <div class="profile">
         <a class="profile" href="http://localhost:8080/user/my-info">
@@ -111,60 +21,23 @@
     </div>
 </header>
 <div class="container">
-    <h2>Создание нового айтема</h2>
+    <h2>Creation a new item</h2>
     <form id="itemForm">
         <input type="text" id="name" name="name" placeholder="Name">
         <input type="text" id="description" name="description" placeholder="Description">
         <input type="text" id="price" name="price" placeholder="Price">
         <select id="category" name="category">
-            <option value="clothing">Одяг та взуття</option>
-            <option value="electronics">Техніка</option>
-            <option value="home">Товари для дому</option>
-            <option value="hobby">Хоббі</option>
+            <option value="clothing">Clothes</option>
+            <option value="electronics">Electronics</option>
+            <option value="home">Home staff</option>
+            <option value="hobby">Hobby</option>
         </select>
         <input type="text" id="wantedItem" name="wantedItem" placeholder="Wanted Item">
         <input type="submit" value="Submit">
     </form>
 </div>
+<script src="http://localhost:63342/demo/templates/js/createFunctions.js"></script>
+<script src="http://localhost:63342/demo/templates/js/validator.js"></script>
 
-<script>
-    function getAllItems() {
-        window.location.href = "http://localhost:8080/items/info?category=&name=";
-    }
-
-    function addNewItem() {
-        window.location.href = "http://localhost:8080/items/creation";
-    }
-    document.getElementById("itemForm").addEventListener("submit", function(event) {
-        event.preventDefault(); // Предотвращаем отправку формы по умолчанию
-
-        // Получаем данные из формы
-        let formData = {
-            name: document.getElementById("name").value,
-            description: document.getElementById("description").value,
-            price: document.getElementById("price").value,
-            category: document.getElementById("category").value,
-            wantedItem: document.getElementById("wantedItem").value
-        };
-
-        // Отправляем AJAX-запрос на сервер
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "http://localhost:8080/items", true);
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    // Обновляем страницу, если запрос выполнен успешно
-                    location.reload();
-                } else {
-                    // Обработка ошибки
-                    console.error("Error:", xhr.responseText);
-                    alert("Error: " + xhr.responseText);
-                }
-            }
-        };
-        xhr.send(JSON.stringify(formData));
-    });
-</script>
 </body>
 </html>

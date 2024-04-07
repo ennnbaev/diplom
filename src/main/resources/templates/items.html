@@ -3,174 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Моя страница</title>
-    <style>
-        .selected {
-            background-color: lightgray; /* Любой стиль, который вы хотите использовать для выделенной категории */
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        header {
-            background-color: #253858;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 80px;
-            padding: 0 20px;
-        }
-
-        .logo img {
-            height: 60px;
-            width: auto;
-        }
-
-        .profile img {
-            height: 40px;
-            width: auto;
-        }
-
-        .header-buttons {
-            display: flex;
-            align-items: center;
-        }
-
-        .header-buttons > * {
-            background-color: #253858;
-            color: #fff;
-            padding: 10px;
-            border: 2px solid #fff;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-
-        .header-buttons > *:last-child {
-            margin-right: 0;
-        }
-
-        .header-buttons > *:hover {
-            background-color: #253858;
-        }
-
-        .search-bar {
-            display: flex;
-            align-items: center;
-            margin: 20px 0;
-        }
-
-        .search-input {
-            font-family: SF Pro Text;
-            font-size: 18px;
-            font-weight: 400;
-            line-height: 20px;
-            text-align: left;
-            background: #091E42;
-            width: 697px;
-            height: 40px;
-            top: 38px;
-            left: 371px;
-            border-radius: 17px;
-            gap: 6px;
-            padding: 8px;
-            margin-right: 10px;
-            border: 2px solid #253858;
-            background: linear-gradient(0deg, #FAFBFC, #FAFBFC),
-            linear-gradient(0deg, #253858, #253858);
-        }
-
-        .search-button {
-            width: 60px;
-            left: 650px;
-            height: 41px;
-            top: 105px;
-            padding: 5.13px;
-            border: none;
-            background-color: transparent;
-            position: absolute;
-
-        }
-
-        .category-container {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            width: 200px; /* Ширина блока категорий */
-        }
-
-        .category {
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            text-decoration: none; /* Убираем подчеркивание */
-            color: black; /* Цвет текста */
-            cursor: pointer; /* Делаем курсор указателем */
-        }
-
-        .category.selected {
-            background-color: lightgray; /* Изменяем фон при выделении */
-        }
-
-        .category:hover {
-            background-color: lightgray; /* Фон при наведении */
-            text-decoration: none; /* Убираем подчеркивание */
-            color: blue; /* Цвет текста при наведении */
-        }
-
-        .category:hover::after {
-            content: "";
-            display: block;
-            width: 100%;
-            height: 2px;
-            background-color: blue; /* Линия под текстом при наведении */
-            text-decoration: none; /* Убираем подчеркивание */
-            margin-top: 5px;
-        }
-
-        .item-card {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 20px;
-            background-color: #f9f9f9;
-            width: calc(25% - 20px); /* Размер карточки на четверть ширины страницы с отступами по 10px */
-            box-sizing: border-box; /* Учитываем padding и border в общей ширине */
-        }
-
-        .item-header {
-            background-color: #253858;
-            color: #fff;
-            padding: 10px;
-            border-radius: 5px 5px 0 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .item-header h2 {
-            font-size: 20px;
-            margin: 0;
-        }
-
-        .item-header p {
-            font-size: 16px;
-            margin: 0;
-        }
-
-        .item-details p {
-            margin: 5px 0;
-        }
-
-        .item-details strong {
-            color: #253858;
-        }
-    </style>
+    <title>Items</title>
+    <link rel="stylesheet" href="http://localhost:63342/demo/templates/styles/itemsStyle.css">
 </head>
 <body>
 <header>
@@ -179,7 +13,7 @@
             <img src="http://localhost:63342/demo/templates/static/img/Frame 4.svg" alt="logo"></a>
     </div>
     <div class="header-buttons">
-        <button type="button" onclick="addNewItem()">Добавить объявление</button>
+        <button type="button" onclick="addNewItem()">Add new item</button>
     </div>
     <div class="profile">
         <a class="profile" href="http://localhost:8080/user/my-info">
@@ -193,10 +27,10 @@
     </button>
 </div>
 <div class="category-container">
-    <div class="category" data-category="clothing" onclick="selectCategory('clothing')">Одяг та взуття</div>
-    <div class="category" data-category="electronics" onclick="selectCategory('electronics')">Техніка</div>
-    <div class="category" data-category="home" onclick="selectCategory('home')">Товари для дому</div>
-    <div class="category" data-category="hobby" onclick="selectCategory('hobby')">Хоббі</div>
+    <div class="category" data-category="clothing" onclick="selectCategory('clothing')">Clothes</div>
+    <div class="category" data-category="electronics" onclick="selectCategory('electronics')">Electronics</div>
+    <div class="category" data-category="home" onclick="selectCategory('home')">Home staff</div>
+    <div class="category" data-category="hobby" onclick="selectCategory('hobby')">Hobby</div>
 </div>
 <div th:each="item, itemIndex : ${items}" class="item-card">
     <div class="item-header">
@@ -204,43 +38,13 @@
         <p>$<span th:text="${item.getPrice()}"></span></p>
     </div>
     <div class="item-details">
-        <p><strong>Описание: </strong><span th:text="${item.getDescription()}"></span></p>
-        <p><strong>Тип: </strong><span th:text="${item.getWantedItem()}"></span></p>
-        <p><strong>Категория: </strong><span th:text="${item.getCategory()}"></span></p>
+        <p><strong>Description: </strong><span th:text="${item.getDescription()}"></span></p>
+        <p><strong>Exchange item: </strong><span th:text="${item.getWantedItem()}"></span></p>
+        <p><strong>Category: </strong><span th:text="${item.getCategory()}"></span></p>
     </div>
-    <button class="send-offer-button" th:onclick="'updateItem(' + ${item.id} + ')'">Отправить предложение</button>
+    <button class="send-offer-button" th:onclick="'updateItem(' + ${item.id} + ')'">Send offer to exchange</button>
 </div>
 
-
-<script>
-    var categoryVal = '';
-
-    function selectCategory(category) {
-        var categories = document.querySelectorAll('.category');
-        categories.forEach(function (element) {
-            if (element.getAttribute('data-category') === category) {
-                if (!element.classList.contains('selected')) {
-                    categoryVal = category;
-                    element.classList.add('selected');
-                } else {
-                    element.classList.remove('selected');
-                }
-            } else {
-                element.classList.remove('selected');
-            }
-        });
-    }
-
-    function addNewItem() {
-        window.location.href = "http://localhost:8080/items/creation";
-    }
-
-    function searchItems() {
-        var searchQuery = document.getElementById('searchInput').value;
-
-        console.log(categoryVal + "/ " + searchQuery);
-        window.location.href = "http://localhost:8080/items/info?category=" + categoryVal + "&name=" + searchQuery;
-    }
-</script>
+<script src="http://localhost:63342/demo/templates/js/getItems.js"></script>
 </body>
 </html>
