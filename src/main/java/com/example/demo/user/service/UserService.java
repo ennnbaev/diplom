@@ -24,14 +24,17 @@ public class UserService implements UserDetailsService {
     UserMapper userMapper;
     @Autowired
     private PasswordEncoder passwordEncoder;
-@Transactional
+
+    @Transactional
     public UserInfoDto getUserInfo(String username) throws Exception {
         return userMapper.toDto(userRepository.findByUsername(username).orElseThrow(Exception::new));
     }
+
     @Transactional
     public void deleteUserAccount(String id) {
         userRepository.deleteById(Long.parseLong(id));
     }
+
     @Transactional
     public void createUser(UserInfoDto userInfoDto) {
         userInfoDto.setPassword(passwordEncoder.encode(userInfoDto.getPassword()));
@@ -39,12 +42,14 @@ public class UserService implements UserDetailsService {
         user.setRoles("ROLE_USER");
         userRepository.save(user);
     }
+
     @Transactional
     public void updateUser(String username, Item item) throws Exception {
         User userFromDB = userRepository.findByUsername(username).orElseThrow(Exception::new);
         userFromDB.getItems().add(item);
         userRepository.save(userFromDB);
     }
+
     @Transactional
     public UserInfoDto updateUser(String username, UserInfoDto userInfoDto) throws Exception {
         User userFromDB = userRepository.findByUsername(username).orElseThrow(Exception::new);

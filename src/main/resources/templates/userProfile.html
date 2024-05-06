@@ -30,7 +30,7 @@
         <input type="submit" value="Update">
         <input type="button" value="Delete Account">
     </form>
-    <h2>Мои предметы</h2>
+    <h2>My items</h2>
     <div class="items-container">
         <div th:each="item, itemStat : ${user.items}" class="item">
             <form th:id="'itemForm_' + ${itemStat.index}">
